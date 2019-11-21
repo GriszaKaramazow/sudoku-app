@@ -18,7 +18,7 @@ public class Main {
         printSudoku();
         Sudoku sudokuArray = new Sudoku(sudoku);
         PrintingService printingService = new PrintingService(sudokuArray.getSudoku());
-        sudokuArray.solveSudoku(true, false);
+        sudokuArray.solveSudoku(true, true);
 
 //        for (int i = 0; i < 10; i++) {
 //            printSeparator();

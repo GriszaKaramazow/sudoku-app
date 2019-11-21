@@ -139,6 +139,31 @@ class CheckingService {
             }
         }
         return false;
-
     }
+
+    int countEmptyBoxes() {
+        int numberOfEmptyBoxes = 0;
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (sudoku[i][j].getBoxValueInteger() == 0) {
+                    numberOfEmptyBoxes++;
+                }
+            }
+        }
+        return numberOfEmptyBoxes;
+    }
+
+    void resetIfAnyChangesWereMadeRecently(boolean resetRecentlySolved, boolean resetRecentlyChanged) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (resetRecentlySolved) {
+                    sudoku[i][j].setHasBeenSolvedRecently(false);
+                }
+                if (resetRecentlyChanged) {
+                    sudoku[i][j].setHasBeenChangedRecently(false);
+                }
+            }
+        }
+    }
+
 }

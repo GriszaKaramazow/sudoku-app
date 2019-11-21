@@ -11,10 +11,6 @@ class PrintingService {
         this.sudoku = sudoku;
     }
 
-    public void setSudoku(SudokuBox[][] sudoku) {
-        this.sudoku = sudoku;
-    }
-
     void printSudoku(boolean markAllSolved, boolean markRecentlySolved) {
         if (markAllSolved && markRecentlySolved) {
             System.out.println("Error: both markAllSolved and markRecentlySolved are set true");
