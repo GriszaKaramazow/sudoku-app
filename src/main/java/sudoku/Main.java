@@ -16,9 +16,12 @@ public class Main {
     public static void main(String[] args) {
 
         printSudoku();
-        Sudoku sudokuArray = new Sudoku(sudoku);
-        PrintingService printingService = new PrintingService(sudokuArray.getSudoku());
-        sudokuArray.solveSudoku(true, true);
+
+        Sudoku sudokuAlternative = new Sudoku(sudoku);
+        SudokuSolver sudokuSolver = new SudokuSolver(sudokuAlternative);
+        sudokuSolver.solveSudoku(true, true);
+
+
 
 //        for (int i = 0; i < 10; i++) {
 //            printSeparator();

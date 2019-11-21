@@ -4,7 +4,7 @@ import java.util.*;
 
 class Sudoku {
 
-    SudokuBox[][] sudoku = new SudokuBox[9][9];
+    private SudokuBox[][] sudoku = new SudokuBox[9][9];
 
     private List<Integer> emptyBoxes = new ArrayList<>();
     private List<Integer> filledBoxes = new ArrayList<>();
@@ -15,7 +15,7 @@ class Sudoku {
     private PrintingService printingService = new PrintingService(sudoku);
     private CheckingService checkingService = new CheckingService(sudoku);
     private GeneratingService generatingService = new GeneratingService(sudoku);
-    private SolvingService solvingService = new SolvingService(sudoku);
+    private SolvingService solvingService = new SolvingService(sudoku, checkingService);
 
     Sudoku(int[][] sudoku) {
         for (int i = 0; i < 9; i++) {
@@ -44,6 +44,24 @@ class Sudoku {
             fillWithRandom();
         } while (!checkingService.checkIfSudokuIsFlawless());
 
+    }
+
+
+
+    public long getSolvingTime() {
+        return solvingTime;
+    }
+
+    public void setSolvingTime(long solvingTime) {
+        this.solvingTime = solvingTime;
+    }
+
+    public int getSolvingStepsCount() {
+        return solvingStepsCount;
+    }
+
+    public void setSolvingStepsCount(int solvingStepsCount) {
+        this.solvingStepsCount = solvingStepsCount;
     }
 
     private void resetBoxesAddresses() {

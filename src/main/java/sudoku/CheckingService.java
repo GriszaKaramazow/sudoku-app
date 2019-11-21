@@ -95,7 +95,7 @@ class CheckingService {
         return false;
     }
 
-    boolean checkIfSudokuHasEmptyBoxes() {
+    private boolean checkIfSudokuHasEmptyBoxes() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (sudoku[i][j].getBoxValue().size() == 0) {
@@ -106,7 +106,7 @@ class CheckingService {
         return false;
     }
 
-    boolean checkIfValueIsDuplicated(SudokuBox sudokuBox) {
+    private boolean checkIfValueIsDuplicated(SudokuBox sudokuBox) {
         if (sudokuBox == null) {
             return false;
         }

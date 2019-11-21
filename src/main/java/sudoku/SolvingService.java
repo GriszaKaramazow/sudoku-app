@@ -3,20 +3,20 @@ package sudoku;
 class SolvingService {
 
     private SudokuBox[][] sudoku;
+    private final CheckingService checkingService;
 
-    CheckingService checkingService = new CheckingService(sudoku);
-
-    public SolvingService(SudokuBox[][] sudoku) {
+    SolvingService(SudokuBox[][] sudoku, CheckingService checkingService) {
         this.sudoku = sudoku;
+        this.checkingService = checkingService;
     }
 
     void solveRowsColumnsAndSquares() {
 
         // solving rows
-        for (int i = 0; i < sudoku.length; i++) {
+        for (SudokuBox[] sudokuBox : sudoku) {
             SudokuSubgrid sudokuSubgrid = new SudokuSubgrid();
-            for (int j = 0; j < sudoku[i].length; j++) {
-                sudokuSubgrid.addSudokuBox(sudoku[i][j]);
+            for (int j = 0; j < sudokuBox.length; j++) {
+                sudokuSubgrid.addSudokuBox(sudokuBox[j]);
             }
             updateSudoku(sudokuSubgrid);
         }
