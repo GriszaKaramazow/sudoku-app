@@ -12,11 +12,6 @@ class Sudoku {
     private long solvingTime;
     private int solvingStepsCount;
 
-    private PrintingService printingService = new PrintingService(sudoku);
-    private CheckingService checkingService = new CheckingService(sudoku);
-    private GeneratingService generatingService = new GeneratingService(sudoku);
-    private SolvingService solvingService = new SolvingService(sudoku, checkingService);
-
     Sudoku(int[][] sudoku) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -26,45 +21,60 @@ class Sudoku {
         }
     }
 
-    Sudoku() {
-        do {
-            // creates sudoku with empty boxes
-            for (int i = 0; i < 9; i++) {
-                for (int j = 0; j < 9; j++) {
-                    SudokuBox sudokuBox = new SudokuBox(i, j, 0);
-                    sudoku[i][j] = sudokuBox;
-                }
+    Sudoku() { // generates empty sudoku
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                SudokuBox sudokuBox = new SudokuBox(i, j, 0);
+                sudoku[i][j] = sudokuBox;
             }
-
-            // fills diagonal squares with random values
-            generatingService.fillDiagonalSquaresWithRandomValues();
-
-            //fills remaining boxes
-            reducePossibleValuesInBoxes();
-            fillWithRandom();
-        } while (!checkingService.checkIfSudokuIsFlawless());
-
+        }
     }
 
-
-
-    public long getSolvingTime() {
+    long getSolvingTime() {
         return solvingTime;
     }
 
-    public void setSolvingTime(long solvingTime) {
+    void setSolvingTime(long solvingTime) {
         this.solvingTime = solvingTime;
     }
 
-    public int getSolvingStepsCount() {
+    int getSolvingStepsCount() {
         return solvingStepsCount;
     }
 
-    public void setSolvingStepsCount(int solvingStepsCount) {
+    void setSolvingStepsCount(int solvingStepsCount) {
         this.solvingStepsCount = solvingStepsCount;
     }
 
-    private void resetBoxesAddresses() {
+    SudokuBox getSudokuBox(int row, int column) {
+        return sudoku[row][column];
+    }
+
+    void setSudokuBox(SudokuBox sudokuBox) {
+        sudoku[sudokuBox.getRowNumber()][sudokuBox.getColumnNumber()] = sudokuBox;
+    }
+
+    List<Integer> getSudokuBoxValue(int row, int column) {
+        return sudoku[row][column].getBoxValue();
+    }
+
+    public void setSudokuBoxValue(int i, int j, ArrayList<Integer> values) {
+        sudoku[i][j].setBoxValue(values);
+    }
+
+    int getSudokuBoxValueInteger(int row, int column) {
+        return sudoku[row][column].getBoxValueInteger();
+    }
+
+    void setSudokuBoxValueInteger(int row, int column, int value) {
+        sudoku[row][column].setBoxValueInteger(value);
+    }
+
+    List<Integer> getEmptyBoxes() {
+        return emptyBoxes;
+    }
+
+    void resetEmptyBoxesList() {
         this.emptyBoxes.clear();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -75,7 +85,23 @@ class Sudoku {
         }
     }
 
-    private void resetFilledBoxesList() {
+    void addToEmptyBoxes(int address) {
+        this.emptyBoxes.add(address);
+    }
+
+    void addToEmptyBoxes(int row, int column) {
+        this.emptyBoxes.add(row*10+column);
+    }
+
+    void removeFromEmptyBoxes(int index) {
+        this.emptyBoxes.remove(index);
+    }
+
+    List<Integer> getFilledBoxes() {
+        return filledBoxes;
+    }
+
+    void resetFilledBoxesList() {
         this.filledBoxes.clear();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -86,36 +112,16 @@ class Sudoku {
         }
     }
 
-    private void reducePossibleValuesInBoxes() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (sudoku[i][j].getBoxValue().size() > 1) {
-                    sudoku[i][j].setBoxValue(possibleValuesInTheBox(sudoku[i][j]));
-                }
-            }
-        }
+    public void addToFilledBoxes(int row, int column) {
+        this.filledBoxes.add(row*10+column);
     }
 
-    public SudokuBox[][] getSudoku() {
+    void removeFromFilledBoxes(int index) {
+        this.filledBoxes.remove(index);
+    }
+
+    SudokuBox[][] getSudoku() {
         return sudoku;
-    }
-
-    void reduceFilledBoxes(int numberOfEmptyBoxes) {
-        boolean generate = true;
-        while (generate) {
-            for (int i = 0; i < numberOfEmptyBoxes; i++) {
-                resetFilledBoxesList();
-                generatingService.removeBox();
-                removeAllEmptyBoxes();
-                if (!solveSudoku(false, false)) {
-                    System.out.println("Step #" + (i+1) + ": Unsolvable");
-                    break;
-                }
-
-            }
-            removeAllEmptyBoxes();
-            generate = false;
-        }
     }
 
     void removeAllEmptyBoxes() {
@@ -124,76 +130,4 @@ class Sudoku {
         }
     }
 
-    private ArrayList<Integer> possibleValuesInTheBox (SudokuBox sudokuBox) {
-        HashSet<Integer> possibleValuesHashSet = new HashSet<>();
-        for (int i = 1; i < 10; i++) {
-            possibleValuesHashSet.add(i);
-        }
-
-        int rowNumber = sudokuBox.getRowNumber();
-        int columnNumber = sudokuBox.getColumnNumber();
-        HashSet<Integer> reservedValues = new HashSet<>();
-        for (int i = 0; i < 9; i++) {
-            if (sudoku[i][columnNumber].getBoxValue().size() == 1) {
-                reservedValues.add(sudoku[i][columnNumber].getBoxValueInteger() );
-            }
-            if (sudoku[rowNumber][i].getBoxValue().size() == 1) {
-                reservedValues.add(sudoku[rowNumber][i].getBoxValueInteger());
-            }
-        }
-
-        rowNumber /= 3;
-        rowNumber *= 3;
-        columnNumber /= 3;
-        columnNumber *= 3;
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (sudoku[rowNumber+i][columnNumber+j].getBoxValue().size() == 1) {
-                    reservedValues.add(sudoku[rowNumber+i][columnNumber+j].getBoxValueInteger());
-                }
-            }
-        }
-
-        possibleValuesHashSet.removeAll(reservedValues);
-        return new ArrayList<>(possibleValuesHashSet);
-    }
-
-    boolean solveSudoku(boolean printSolved, boolean printSteps) {
-        solvingStepsCount = 0;
-        long startTime = System.currentTimeMillis();
-
-        while (checkingService.checkIfAnyBoxWasChangedRecently(false)) {
-            checkingService.resetIfAnyChangesWereMadeRecently(true, true);
-            solvingService.solveRowsColumnsAndSquares();
-            solvingStepsCount++;
-            if (checkingService.checkIfAnyBoxWasChangedRecently(true) && printSteps) {
-                System.out.println("Step " + solvingStepsCount + ":");
-                printingService.printSudoku(false,true);
-                System.out.println(checkingService.countEmptyBoxes());
-            }
-        }
-        if (!checkingService.checkIfSudokuIsSolved()) {
-            if (printSolved || printSteps) {
-                System.out.println("The sudoku was not solved properly");
-            }
-            return false;
-        }
-        if (printSolved && !printSteps) {
-            printingService.printSudoku(true,false);
-        }
-        solvingTime = System.currentTimeMillis() - startTime;
-        return checkingService.checkIfSodokuSolvedProperly(printSolved || printSteps, solvingTime);
-    }
-
-    private void fillWithRandom() {
-        while (!solveSudoku(false, false)) {
-            generatingService.fillRandomBoxWithRandomValue();
-            reducePossibleValuesInBoxes();
-            if (!checkingService.checkIfSudokuIsFlawless()) {
-                break;
-            }
-        }
-
-    }
 }

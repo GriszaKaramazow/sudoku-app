@@ -1,86 +1,83 @@
 package sudoku;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 class GeneratingService {
 
-    private SudokuBox[][] sudoku;
-
-    private List<Integer> emptyBoxes = new ArrayList<>();
-    private List<Integer> filledBoxes = new ArrayList<>();
+    private Sudoku sudoku;
+    private SolvingService solvingService;
 
     private Random randomGenerator = new Random();
 
-
-    public GeneratingService(SudokuBox[][] sudoku) {
+    GeneratingService(Sudoku sudoku, SolvingService solvingService) {
         this.sudoku = sudoku;
-    }
-
-    private void resetEmptyBoxesList() {
-        this.emptyBoxes.clear();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (!sudoku[i][j].isSolved()) {
-                    this.emptyBoxes.add(i*10+j);
-                }
-            }
-        }
-    }
-
-    private void resetFilledBoxesList() {
-        this.filledBoxes.clear();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (sudoku[i][j].getBoxValueInteger() != 0) {
-                    this.filledBoxes.add(i*10+j);
-                }
-            }
-        }
+        this.solvingService = solvingService;
     }
 
     void fillDiagonalSquaresWithRandomValues() {
         for (int i = 0; i < 9; i += 3) {
-            List<Integer> possibilities = new ArrayList<>(emptyBoxes);
+            List<Integer> possibilities = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
             List<Integer> addresses = new ArrayList<>(Arrays.asList(0, 1, 2, 10, 11, 12, 20, 21, 22));
             for (Integer address : addresses) {
                 Integer value = possibilities.get(randomGenerator.nextInt(possibilities.size()));
-                sudoku[i + address / 10][i + address % 10].setBoxValueInteger(value);
+                sudoku.setSudokuBoxValueInteger(i + address / 10, i + address % 10, value);
                 possibilities.remove(value);
             }
         }
     }
 
     boolean fillRandomBoxWithRandomValue() {
-        resetEmptyBoxesList();
+        sudoku.resetEmptyBoxesList();
         int randomAddress;
-        if (emptyBoxes.size() > 0) {
-            randomAddress = randomGenerator.nextInt(emptyBoxes.size());
-            int rowNumber = emptyBoxes.get(randomAddress)/10;
-            int columnNumber = emptyBoxes.get(randomAddress)%10;
-            this.emptyBoxes.remove(randomAddress);
-            List<Integer> possibleValues = sudoku[rowNumber][columnNumber].getBoxValue();
-            if (sudoku[rowNumber][columnNumber].getBoxValue().size() == 1) {
-                sudoku[rowNumber][columnNumber].setBoxValueInteger(sudoku[rowNumber][columnNumber].getBoxValueInteger());
+        if (sudoku.getEmptyBoxes().size() > 0) {
+            randomAddress = randomGenerator.nextInt(sudoku.getEmptyBoxes().size());
+            int row = sudoku.getEmptyBoxes().get(randomAddress)/10;
+            int column = sudoku.getEmptyBoxes().get(randomAddress)%10;
+            sudoku.removeFromEmptyBoxes(randomAddress);
+            List<Integer> possibleValues = sudoku.getSudokuBoxValue(row, column);
+            if (sudoku.getSudokuBoxValue(row, column).size() == 1) {
+                sudoku.setSudokuBoxValueInteger(row, column, sudoku.getSudokuBoxValueInteger(row, column));
             } else {
-                if (sudoku[rowNumber][columnNumber].getBoxValue().size() != 0) {
+                if (sudoku.getSudokuBoxValue(row, column).size() != 0) {
                     int randomValue = possibleValues.get(randomGenerator.nextInt(possibleValues.size()));
-                    sudoku[rowNumber][columnNumber].setBoxValueInteger(randomValue);
+                    sudoku.setSudokuBoxValueInteger(row, column, randomValue);
                 } else {
                     return false;
                 }
             }
-
         }
         return true;
     }
 
-    void removeBox() {
-        resetFilledBoxesList();
-        int randomAddress = randomGenerator.nextInt(filledBoxes.size());
-        emptyBoxes.add(randomAddress);
+    void removeRandomBox() {
+        sudoku.resetFilledBoxesList();
+        int randomAddress = randomGenerator.nextInt(sudoku.getFilledBoxes().size());
+        sudoku.addToEmptyBoxes(randomAddress);
     }
 
+    // TODO: clean
+    void reduceFilledBoxes(int numberOfEmptyBoxes) {
+        boolean generate = true;
+        while (generate) {
+            for (int i = 0; i < numberOfEmptyBoxes; i++) {
+                sudoku.resetFilledBoxesList();
+                removeRandomBox();
+                removeAllEmptyBoxes();
+                if (!solvingService.solveSudoku(false, false)) {
+                    System.out.println("Step #" + (i+1) + ": Unsolvable");
+                    break;
+                }
+
+            }
+            removeAllEmptyBoxes();
+            generate = false;
+        }
+    }
+
+    // TODO: clean
+    void removeAllEmptyBoxes() {
+        for (Integer emptyBox : sudoku.getEmptyBoxes()) {
+            // sudoku[sudoku.getEmptyBoxes(emptyBox)/10][filledBoxes.get(emptyBox)%10].resetBox();
+        }
+    }
 }

@@ -2,12 +2,12 @@ package sudoku;
 
 class PrintingService {
 
-    private SudokuBox[][] sudoku;
+    private Sudoku sudoku;
 
     private final String resetFontColor = "\u001B[0m"; // resets font color
     private final String blueFontColor = "\u001B[34m"; // sets font color to blue
 
-    public PrintingService(SudokuBox[][] sudoku) {
+    PrintingService(Sudoku sudoku) {
         this.sudoku = sudoku;
     }
 
@@ -20,17 +20,17 @@ class PrintingService {
             for (int j = 0; j < 9; j++) {
                 boolean markBox;
                 if (markAllSolved) {
-                    markBox = !sudoku[i][j].isGiven();
+                    markBox = !sudoku.getSudokuBox(i, j).isGiven();
                 } else if (markRecentlySolved) {
-                    markBox = sudoku[i][j].hasBeenSolvedRecently();
+                    markBox = sudoku.getSudokuBox(i, j).hasBeenSolvedRecently();
                 } else {
                     markBox = false;
                 }
                 if (markBox) {
                     System.out.print("[");
-                    System.out.print(blueFontColor + sudoku[i][j].getBoxValueString() + resetFontColor);
+                    System.out.print(blueFontColor + sudoku.getSudokuBox(i, j).getBoxValueString() + resetFontColor);
                     System.out.print("]");
-                } else System.out.print("[" + sudoku[i][j].getBoxValueString() + "]");
+                } else System.out.print("[" + sudoku.getSudokuBox(i, j).getBoxValueString() + "]");
             }
             System.out.println();
         }
@@ -40,7 +40,7 @@ class PrintingService {
     void printSudokuArrayWithArrayLists() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                System.out.print(sudoku[i][j].getBoxValue().toString());
+                System.out.print(sudoku.getSudokuBox(i, j).getBoxValue().toString());
             }
             System.out.println();
         }
@@ -50,7 +50,7 @@ class PrintingService {
     void printBoxesChangedRecently() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (sudoku[i][j].isSolved()) {
+                if (sudoku.getSudokuBox(i, j).isSolved()) {
                     System.out.print("[");
                     System.out.print(blueFontColor + "X" + resetFontColor);
                     System.out.print("]");

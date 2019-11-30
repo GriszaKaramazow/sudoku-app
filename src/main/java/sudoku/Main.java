@@ -17,20 +17,11 @@ public class Main {
 
         printSudoku();
 
-        Sudoku sudokuAlternative = new Sudoku(sudoku);
-        SudokuSolver sudokuSolver = new SudokuSolver(sudokuAlternative);
-        sudokuSolver.solveSudoku(true, true);
-
-
-
-//        for (int i = 0; i < 10; i++) {
-//            printSeparator();
-//            System.out.println(i+1 + "# :");
-//            Sudoku generateSudoku = new Sudoku();
-//            generateSudoku.reduceFilledBoxes(60);
-//            generateSudoku.solveSudoku(true, false);
-//            System.out.println(generateSudoku.checkIfSodokuSolvedProperly(false));
-//        }
+        Sudoku sudokuToSolve = new Sudoku(sudoku);
+        PrintingService printingService = new PrintingService(sudokuToSolve);
+        CheckingService checkingService = new CheckingService(sudokuToSolve);
+        SolvingService solvingService = new SolvingService(sudokuToSolve, checkingService, printingService);
+        solvingService.solveSudoku(true, true);
 
     }
 
