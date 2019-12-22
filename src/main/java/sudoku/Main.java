@@ -18,10 +18,31 @@ public class Main {
         printSudoku();
 
         Sudoku sudokuToSolve = new Sudoku(sudoku);
+
         PrintingService printingService = new PrintingService(sudokuToSolve);
         CheckingService checkingService = new CheckingService(sudokuToSolve);
         SolvingService solvingService = new SolvingService(sudokuToSolve, checkingService, printingService);
-        solvingService.solveSudoku(true, true);
+
+        solvingService.solveSudoku(true, false);
+
+        SudokuGenerator sudokuGenerator = new SudokuGenerator();
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println("#" + (i+1) + ": ");
+            if (sudokuGenerator.fillWithRandom()) {
+                sudokuGenerator.printSudoku(false, false);
+            } else {
+                System.out.println("Unsuccessful");
+                System.out.println();
+            }
+        }
+
+        for (int i = 0; i < 10; i++) {
+            System.out.print("#" + (i+1) + ": ");
+            System.out.println(checkingService.checkIfSudokuIsFilledProperly());
+            sudokuGenerator.generateSudoku();
+            sudokuGenerator.printSudoku(false, false);
+        }
 
     }
 

@@ -30,6 +30,16 @@ class Sudoku {
         }
     }
 
+    int[][] generateSimpleSudoku() {
+        int[][] simpleSudoku = new int[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                simpleSudoku[i][j] = getSudokuBoxValueInteger(i,j);
+            }
+        }
+        return simpleSudoku;
+    }
+
     long getSolvingTime() {
         return solvingTime;
     }
@@ -118,6 +128,10 @@ class Sudoku {
 
     void removeFromFilledBoxes(int index) {
         this.filledBoxes.remove(index);
+    }
+
+    void resetSudokuBox(int row, int column) {
+        sudoku[row][column].resetBox();
     }
 
     SudokuBox[][] getSudoku() {

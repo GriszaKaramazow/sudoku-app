@@ -15,6 +15,10 @@ class SolvingService {
         this.printingService = printingService;
     }
 
+    public void setSudoku(Sudoku sudoku) {
+        this.sudoku = sudoku;
+    }
+
     boolean solveSudoku(boolean printSolved, boolean printSteps) {
         int solvingStepsCount = 0;
         long startTime = System.currentTimeMillis();
@@ -39,9 +43,7 @@ class SolvingService {
             printingService.printSudoku(true,false);
         }
         sudoku.setSolvingTime(System.currentTimeMillis() - startTime);
-//        return checkingService.checkIfSodokuSolvedProperly(printSolved || printSteps,
-//                sudoku.getSolvingTime());
-        return checkingService.checkIfSudokuIsFlawless();
+        return checkingService.checkIfSudokuIsFlawless(printSolved || printSteps);
     }
 
     void solveRowsColumnsAndSquares() {
@@ -99,7 +101,7 @@ class SolvingService {
         }
     }
 
-    private ArrayList<Integer> possibleValuesInTheBox (int row, int column) {
+    ArrayList<Integer> possibleValuesInTheBox (int row, int column) {
         HashSet<Integer> possibleValuesHashSet = new HashSet<>();
         for (int i = 1; i < 10; i++) {
             possibleValuesHashSet.add(i);
