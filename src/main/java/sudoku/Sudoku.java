@@ -34,7 +34,11 @@ class Sudoku {
         int[][] simpleSudoku = new int[9][9];
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                simpleSudoku[i][j] = getSudokuBoxValueInteger(i,j);
+                if (sudoku[i][j].isSolved()) {
+                    simpleSudoku[i][j] = getSudokuBoxValueInteger(i, j);
+                } else {
+                    simpleSudoku[i][j] = 0;
+                }
             }
         }
         return simpleSudoku;
@@ -89,18 +93,28 @@ class Sudoku {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (!sudoku[i][j].isSolved()) {
-                    this.emptyBoxes.add(i*10+j);
+                    this.emptyBoxes.add(i * 10 + j);
                 }
             }
         }
     }
 
     void addToEmptyBoxes(int address) {
-        this.emptyBoxes.add(address);
+        emptyBoxes.add(address);
     }
 
     void addToEmptyBoxes(int row, int column) {
-        this.emptyBoxes.add(row*10+column);
+        if (!emptyBoxes.contains(row * 10 + column)) {
+            emptyBoxes.add(row * 10 + column);
+        }
+    }
+
+    void addToEmptyBoxes(List<Integer> emptyBoxes) {
+        for (Integer emptyBox : emptyBoxes) {
+            int row = emptyBox / 10;
+            int column = emptyBox % 10;
+            addToEmptyBoxes(row, column);
+        }
     }
 
     void removeFromEmptyBoxes(int index) {
@@ -115,15 +129,15 @@ class Sudoku {
         this.filledBoxes.clear();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (sudoku[i][j].getBoxValueInteger() != 0) {
-                    this.filledBoxes.add(i*10+j);
+                if (sudoku[i][j].getBoxValue().size() == 1) {
+                    this.filledBoxes.add(i * 10 + j);
                 }
             }
         }
     }
 
     public void addToFilledBoxes(int row, int column) {
-        this.filledBoxes.add(row*10+column);
+        this.filledBoxes.add(row * 10 + column);
     }
 
     void removeFromFilledBoxes(int index) {
@@ -139,8 +153,13 @@ class Sudoku {
     }
 
     void removeAllEmptyBoxes() {
+        if (emptyBoxes.size() == 0) {
+            return;
+        }
         for (Integer emptyBox : emptyBoxes) {
-            sudoku[filledBoxes.get(emptyBox)/10][filledBoxes.get(emptyBox)%10].resetBox();
+            int row = emptyBox / 10;
+            int column = emptyBox % 10;
+            sudoku[row][column].resetBox();
         }
     }
 

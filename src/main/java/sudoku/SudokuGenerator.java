@@ -3,6 +3,7 @@ package sudoku;
 public class SudokuGenerator {
 
     private Sudoku sudoku;
+    private SimpleSudoku simpleSudoku;
     private final PrintingService printingService;
     private final CheckingService checkingService;
     private final SolvingService solvingService;
@@ -22,6 +23,10 @@ public class SudokuGenerator {
 
     void resetSudokuGenerator() {
         sudoku = new Sudoku();
+        resetSudokuGenerator(sudoku);
+    }
+
+    void resetSudokuGenerator(Sudoku sudoku) {
         printingService.setSudoku(sudoku);
         checkingService.setSudoku(sudoku);
         solvingService.setSudoku(sudoku);
@@ -31,20 +36,21 @@ public class SudokuGenerator {
     void printSudoku(boolean markAllSolved, boolean markRecentlySolved) {
         printingService.printSudoku(markAllSolved, markRecentlySolved);
     }
-cd
-    void generateSudoku() {
+
+    boolean solveSudoku(boolean printSolved, boolean printSteps) {
+        return solvingService.solveSudoku(printSolved, printSteps);
+    }
+
+    SimpleSudoku generateSudoku() {
         while(!fillWithRandom()) {
-            reduceFilledBoxes(1);
         }
+        this.simpleSudoku = generatingService.createSudoku();
+        return simpleSudoku;
     }
 
     boolean fillWithRandom() {
         resetSudokuGenerator();
         return generatingService.fillWithRandom();
-    }
-
-    void reduceFilledBoxes(int numberOfEmptyBoxes) {
-        generatingService.reduceFilledBoxes(numberOfEmptyBoxes);
     }
 
 }

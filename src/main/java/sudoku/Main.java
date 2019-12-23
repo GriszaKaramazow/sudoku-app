@@ -15,33 +15,28 @@ public class Main {
 
     public static void main(String[] args) {
 
-        printSudoku();
-
-        Sudoku sudokuToSolve = new Sudoku(sudoku);
-
-        PrintingService printingService = new PrintingService(sudokuToSolve);
-        CheckingService checkingService = new CheckingService(sudokuToSolve);
-        SolvingService solvingService = new SolvingService(sudokuToSolve, checkingService, printingService);
-
-        solvingService.solveSudoku(true, false);
+//        printSudoku();
+//
+//        Sudoku sudokuToSolve = new Sudoku(sudoku);
+//
+//        PrintingService printingService = new PrintingService(sudokuToSolve);
+//        CheckingService checkingService = new CheckingService(sudokuToSolve);
+//        SolvingService solvingService = new SolvingService(sudokuToSolve, checkingService, printingService);
+//
+//        solvingService.solveSudoku(true, false);
 
         SudokuGenerator sudokuGenerator = new SudokuGenerator();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             System.out.println("#" + (i+1) + ": ");
-            if (sudokuGenerator.fillWithRandom()) {
-                sudokuGenerator.printSudoku(false, false);
-            } else {
-                System.out.println("Unsuccessful");
-                System.out.println();
-            }
-        }
-
-        for (int i = 0; i < 10; i++) {
-            System.out.print("#" + (i+1) + ": ");
-            System.out.println(checkingService.checkIfSudokuIsFilledProperly());
-            sudokuGenerator.generateSudoku();
-            sudokuGenerator.printSudoku(false, false);
+            SimpleSudoku simpleSudoku = sudokuGenerator.generateSudoku();
+            simpleSudoku.printSolvedSudoku();
+            simpleSudoku.printGeneratedSudoku();
+            Sudoku sudoku = new Sudoku(simpleSudoku.getGeneratedSudoku());
+            PrintingService printingService = new PrintingService(sudoku);
+            CheckingService checkingService = new CheckingService(sudoku);
+            SolvingService solvingService = new SolvingService(sudoku, checkingService, printingService);
+            solvingService.solveSudoku(true, false);
         }
 
     }
