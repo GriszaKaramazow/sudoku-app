@@ -21,7 +21,6 @@ class SolvingService {
 
     boolean solveSudoku(boolean printSolved, boolean printSteps) {
         int solvingStepsCount = 0;
-        long startTime = System.currentTimeMillis();
 
         while (checkingService.checkIfAnyBoxWasChangedRecently(false)) {
             checkingService.resetRecentChanges(true, true);
@@ -31,18 +30,19 @@ class SolvingService {
                 System.out.println("Step " + solvingStepsCount + ":");
                 printingService.printSudoku(false,true);
             }
-            sudoku.setSolvingStepsCount(solvingStepsCount);
         }
+
         if (!checkingService.checkIfSudokuIsSolved()) {
             if (printSolved || printSteps) {
                 System.out.println("The sudoku was not solved properly");
             }
             return false;
         }
+
         if (printSolved && !printSteps) {
             printingService.printSudoku(true,false);
         }
-        sudoku.setSolvingTime(System.currentTimeMillis() - startTime);
+
         return checkingService.checkIfSudokuIsFlawless(printSolved || printSteps);
     }
 
@@ -88,16 +88,6 @@ class SolvingService {
         sudokuSubgrid.checkIfDigitAppearsOnce();
         for (SudokuBox sudokuBox : sudokuBoxes) {
             sudoku.setSudokuBox(sudokuBox);
-        }
-    }
-
-    void reducePossibleValuesInBoxes() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (sudoku.getSudokuBoxValue(i ,j).size() > 1) {
-                    sudoku.setSudokuBoxValue(i, j, possibleValuesInTheBox(i, j));
-                }
-            }
         }
     }
 

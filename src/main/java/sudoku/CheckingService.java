@@ -28,7 +28,7 @@ class CheckingService {
             return false;
         }
         if (printMessageIfSolvedProperly) {
-            String message = "Sudoku has been solved properly in " + sudoku.getSolvingTime() + " ms";
+            String message = "Sudoku has been solved properly";
             StringBuilder dashes = new StringBuilder();
             for (int i = 0; i < message.length(); i++) {
                 dashes.append("-");
@@ -77,10 +77,6 @@ class CheckingService {
         return false;
     }
 
-    boolean checkIfSudokuIsFilledProperly() {
-        return !checkIfSudokuHasDuplicatedBoxes() && !checkIfSudokuHasBlankBoxes();
-    }
-
     boolean checkIfSudokuCanBeFurtherFilled() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -126,18 +122,6 @@ class CheckingService {
             }
         }
         return false;
-    }
-
-    int countEmptyBoxes() {
-        int numberOfEmptyBoxes = 0;
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (sudoku.getSudokuBox(i, j).getBoxValueInteger() == 0) {
-                    numberOfEmptyBoxes++;
-                }
-            }
-        }
-        return numberOfEmptyBoxes;
     }
 
     void resetRecentChanges(boolean resetRecentlySolved, boolean resetRecentlyChanged) {

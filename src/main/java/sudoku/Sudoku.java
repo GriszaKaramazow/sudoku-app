@@ -9,8 +9,6 @@ class Sudoku {
     private List<Integer> emptyBoxes = new ArrayList<>();
     private List<Integer> filledBoxes = new ArrayList<>();
     private List<Integer> emptyBoxValues = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-    private long solvingTime;
-    private int solvingStepsCount;
 
     Sudoku(int[][] sudoku) {
         for (int i = 0; i < 9; i++) {
@@ -42,22 +40,6 @@ class Sudoku {
             }
         }
         return simpleSudoku;
-    }
-
-    long getSolvingTime() {
-        return solvingTime;
-    }
-
-    void setSolvingTime(long solvingTime) {
-        this.solvingTime = solvingTime;
-    }
-
-    int getSolvingStepsCount() {
-        return solvingStepsCount;
-    }
-
-    void setSolvingStepsCount(int solvingStepsCount) {
-        this.solvingStepsCount = solvingStepsCount;
     }
 
     SudokuBox getSudokuBox(int row, int column) {
