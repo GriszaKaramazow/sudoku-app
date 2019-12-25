@@ -13,9 +13,9 @@ class CheckingService {
     }
 
     boolean checkIfSudokuIsSolved() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (!sudoku.getSudokuBox(i, j).isSolved()) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                if (!sudoku.getSudokuBox(row, column).isSolved()) {
                     return false;
                 }
             }
@@ -23,7 +23,7 @@ class CheckingService {
         return true;
     }
 
-    boolean checkIfSudokuIsFlawless(boolean printMessageIfSolvedProperly) {
+    boolean checkIfSudokuIsSolvedProperly(boolean printMessageIfSolvedProperly) {
         if (checkIfSudokuHasBlankBoxes() || checkIfSudokuHasDuplicatedBoxes()) {
             return false;
         }
@@ -53,11 +53,10 @@ class CheckingService {
         return false;
     }
 
-    // works well
     boolean checkIfSudokuHasDuplicatedBoxes() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (checkIfValueIsDuplicated(sudoku.getSudokuBox(i, j))) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                if (checkIfValueIsDuplicated(sudoku.getSudokuBox(row, column))) {
                     return true;
                 }
             }
@@ -65,11 +64,10 @@ class CheckingService {
         return false;
     }
 
-    //works well
     boolean checkIfSudokuHasBlankBoxes() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (sudoku.getSudokuBoxValue(i, j).size() == 0) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                if (sudoku.getSudokuBoxValue(row, column).size() == 0) {
                     return true;
                 }
             }
@@ -78,9 +76,9 @@ class CheckingService {
     }
 
     boolean checkIfSudokuCanBeFurtherFilled() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (sudoku.getSudokuBoxValue(i,j).size() > 1) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                if (sudoku.getSudokuBoxValue(row,column).size() > 1) {
                     return true;
                 }
             }
@@ -125,13 +123,13 @@ class CheckingService {
     }
 
     void resetRecentChanges(boolean resetRecentlySolved, boolean resetRecentlyChanged) {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
                 if (resetRecentlySolved) {
-                    sudoku.getSudokuBox(i, j).setHasBeenSolvedRecently(false);
+                    sudoku.getSudokuBox(row, column).setHasBeenSolvedRecently(false);
                 }
                 if (resetRecentlyChanged) {
-                    sudoku.getSudokuBox(i, j).setHasBeenChangedRecently(false);
+                    sudoku.getSudokuBox(row, column).setHasBeenChangedRecently(false);
                 }
             }
         }

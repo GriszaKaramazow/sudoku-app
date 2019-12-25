@@ -43,7 +43,7 @@ class SolvingService {
             printingService.printSudoku(true,false);
         }
 
-        return checkingService.checkIfSudokuIsFlawless(printSolved || printSteps);
+        return checkingService.checkIfSudokuIsSolvedProperly(printSolved || printSteps);
     }
 
     void solveRowsColumnsAndSquares() {

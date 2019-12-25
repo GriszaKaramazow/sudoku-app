@@ -71,7 +71,7 @@ class GeneratingService {
             fillRandomBoxWithRandomValue();
             solvingService.solveSudoku(false, false);
         }
-        return (checkingService.checkIfSudokuIsFlawless(false));
+        return (checkingService.checkIfSudokuIsSolvedProperly(false));
     }
 
     void removeRandomBox() {
