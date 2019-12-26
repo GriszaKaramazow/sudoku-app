@@ -6,7 +6,7 @@ public class SimpleSudoku {
 
     private int[][] generatedSudoku;
     private int[][] solvedSudoku;
-    private int emptyBoxes;
+    private int numberOfEmptyBoxes;
 
     public SimpleSudoku(int[][] solvedSudoku) {
         this.solvedSudoku = solvedSudoku;
@@ -20,8 +20,8 @@ public class SimpleSudoku {
         return solvedSudoku;
     }
 
-    public int getEmptyBoxes() {
-        return emptyBoxes;
+    public int getNumberOfEmptyBoxes() {
+        return numberOfEmptyBoxes;
     }
 
     int[][] createSudoku(List<Integer> emptyBoxes) {
@@ -50,7 +50,7 @@ public class SimpleSudoku {
                 }
             }
         }
-        this.emptyBoxes = emptyBoxes;
+        this.numberOfEmptyBoxes = emptyBoxes;
     }
 
     void printSolvedSudoku() {

@@ -33,14 +33,6 @@ public class SudokuGenerator {
         generatingService.setSudoku(sudoku);
     }
 
-    void printSudoku(boolean markAllSolved, boolean markRecentlySolved) {
-        printingService.printSudoku(markAllSolved, markRecentlySolved);
-    }
-
-    boolean solveSudoku(boolean printSolved, boolean printSteps) {
-        return solvingService.solveSudoku(printSolved, printSteps);
-    }
-
     SimpleSudoku generateSudoku() {
         while(!fillWithRandom()) {
         }

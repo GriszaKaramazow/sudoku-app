@@ -11,19 +11,19 @@ class Sudoku {
     private List<Integer> emptyBoxValues = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
 
     Sudoku(int[][] sudoku) {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                SudokuBox sudokuBox = new SudokuBox(i, j, sudoku[i][j]);
-                this.sudoku[i][j] = sudokuBox;
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                SudokuBox sudokuBox = new SudokuBox(row, column, sudoku[row][column]);
+                this.sudoku[row][column] = sudokuBox;
             }
         }
     }
 
     Sudoku() { // generates empty sudoku
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                SudokuBox sudokuBox = new SudokuBox(i, j, 0);
-                sudoku[i][j] = sudokuBox;
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                SudokuBox sudokuBox = new SudokuBox(row, column, 0);
+                this.sudoku[row][column] = sudokuBox;
             }
         }
     }
@@ -128,10 +128,6 @@ class Sudoku {
 
     void resetSudokuBox(int row, int column) {
         sudoku[row][column].resetBox();
-    }
-
-    SudokuBox[][] getSudoku() {
-        return sudoku;
     }
 
     void removeAllEmptyBoxes() {
