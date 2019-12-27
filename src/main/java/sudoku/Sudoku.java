@@ -8,7 +8,6 @@ class Sudoku {
 
     private List<Integer> emptyBoxes = new ArrayList<>();
     private List<Integer> filledBoxes = new ArrayList<>();
-    private List<Integer> emptyBoxValues = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
 
     Sudoku(int[][] sudoku) {
         for (int row = 0; row < 9; row++) {
