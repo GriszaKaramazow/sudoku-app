@@ -1,6 +1,7 @@
 package sudoku;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 class SolvingService {
@@ -47,34 +48,32 @@ class SolvingService {
     }
 
     void solveRowsColumnsAndSquares() {
-        // solving rows
-        for (int i = 0; i < 9; i++) {
-            SudokuSubgrid sudokuSubgrid = new SudokuSubgrid();
-            for (int j = 0; j < 9; j++) {
-                sudokuSubgrid.addSudokuBox(sudoku.getSudokuBox(j,i));
+
+        for (int row = 0; row < 9; row++) {
+            SudokuSubgrid sudokuRow = new SudokuSubgrid();
+            for (int column = 0; column < 9; column++) {
+                sudokuRow.addSudokuBox(sudoku.getSudokuBox(column,row));
             }
-            updateSudoku(sudokuSubgrid);
+            updateSudoku(sudokuRow);
         }
 
-        // solving columns
-        for (int i = 0; i < 9; i++) {
-            SudokuSubgrid sudokuSubgrid = new SudokuSubgrid();
-            for (int j = 0; j < 9; j++) {
-                sudokuSubgrid.addSudokuBox(sudoku.getSudokuBox(i,j));
+        for (int row = 0; row < 9; row++) {
+            SudokuSubgrid sudokuColumn = new SudokuSubgrid();
+            for (int column = 0; column < 9; column++) {
+                sudokuColumn.addSudokuBox(sudoku.getSudokuBox(row,column));
             }
-            updateSudoku(sudokuSubgrid);
+            updateSudoku(sudokuColumn);
         }
 
-        // solving squares
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                SudokuSubgrid sudokuSubgrid = new SudokuSubgrid();
+                SudokuSubgrid sudokuSquare = new SudokuSubgrid();
                 for (int x = 0; x < 3; x++) {
                     for (int y = 0; y < 3; y++) {
-                        sudokuSubgrid.addSudokuBox(sudoku.getSudokuBox(i*3+x, j*3+y));
+                        sudokuSquare.addSudokuBox(sudoku.getSudokuBox(i*3+x, j*3+y));
                     }
                 }
-                updateSudoku(sudokuSubgrid);
+                updateSudoku(sudokuSquare);
             }
         }
     }
@@ -91,31 +90,28 @@ class SolvingService {
         }
     }
 
-    ArrayList<Integer> possibleValuesInTheBox (int row, int column) {
-        HashSet<Integer> possibleValuesHashSet = new HashSet<>();
-        for (int i = 1; i < 10; i++) {
-            possibleValuesHashSet.add(i);
-        }
-
+    ArrayList<Integer> possibleValuesInTheBox (int inputRow, int inputColumn) {
+        HashSet<Integer> possibleValuesHashSet = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
         HashSet<Integer> reservedValues = new HashSet<>();
+
         for (int i = 0; i < 9; i++) {
-            if (sudoku.getSudokuBoxValue(i, column).size() == 1) {
-                reservedValues.add(sudoku.getSudokuBoxValueInteger(i, column) );
+            if (sudoku.getSudokuBoxValue(i, inputColumn).size() == 1) {
+                reservedValues.add(sudoku.getSudokuBoxValueInteger(i, inputColumn) );
             }
-            if (sudoku.getSudokuBoxValue(row, i).size() == 1) {
-                reservedValues.add(sudoku.getSudokuBoxValueInteger(row, i));
+            if (sudoku.getSudokuBoxValue(inputRow, i).size() == 1) {
+                reservedValues.add(sudoku.getSudokuBoxValueInteger(inputRow, i));
             }
         }
 
-        row /= 3;
-        row *= 3;
-        column /= 3;
-        column *= 3;
+        inputRow /= 3;
+        inputRow *= 3;
+        inputColumn /= 3;
+        inputColumn *= 3;
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (sudoku.getSudokuBoxValue(row+i, column+j).size() == 1) {
-                    reservedValues.add(sudoku.getSudokuBoxValueInteger(row+i, column+j));
+                if (sudoku.getSudokuBoxValue(inputRow+i, inputColumn+j).size() == 1) {
+                    reservedValues.add(sudoku.getSudokuBoxValueInteger(inputRow+i, inputColumn+j));
                 }
             }
         }

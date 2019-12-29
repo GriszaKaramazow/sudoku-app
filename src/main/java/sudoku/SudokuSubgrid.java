@@ -10,7 +10,7 @@ class SudokuSubgrid {
     private SudokuBox[] sudokuSubgrid = new SudokuBox[9];
     private int sudokuBoxesCount = 0;
 
-    void addSudokuBox(SudokuBox sudokuBox) { // adds a box into the subgrid
+    void addSudokuBox(SudokuBox sudokuBox) {
         sudokuSubgrid[sudokuBoxesCount++] = sudokuBox;
     }
 
@@ -54,26 +54,6 @@ class SudokuSubgrid {
                 }
             }
         }
-    }
-
-    boolean checkIfSudokuGridIsSolvedProperly() {
-        Set<Integer> boxesValues = new HashSet<>();
-        for (SudokuBox sudokuBox : sudokuSubgrid) {
-            if (sudokuBox.getBoxValue().size() != 1) {
-                return true;
-            } else {
-                boxesValues.add(sudokuBox.getBoxValueInteger());
-            }
-        }
-        return boxesValues.size() != 9;
-    }
-
-    public String toString() {
-        StringBuilder sudokuSubgridString = new StringBuilder();
-        for (SudokuBox sudokuBox : sudokuSubgrid) {
-            sudokuSubgridString.append(sudokuBox.getBoxValue().toString());
-        }
-        return sudokuSubgridString.toString();
     }
 
 }
