@@ -95,10 +95,10 @@ class SolvingService {
         HashSet<Integer> reservedValues = new HashSet<>();
 
         for (int i = 0; i < 9; i++) {
-            if (sudoku.getSudokuBoxValue(i, inputColumn).size() == 1) {
+            if (sudoku.getSudokuBoxValueInteger(i, inputColumn) != 0) {
                 reservedValues.add(sudoku.getSudokuBoxValueInteger(i, inputColumn) );
             }
-            if (sudoku.getSudokuBoxValue(inputRow, i).size() == 1) {
+            if (sudoku.getSudokuBoxValueInteger(inputRow, i) != 0) {
                 reservedValues.add(sudoku.getSudokuBoxValueInteger(inputRow, i));
             }
         }
@@ -110,10 +110,11 @@ class SolvingService {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (sudoku.getSudokuBoxValue(inputRow+i, inputColumn+j).size() == 1) {
+                if (sudoku.getSudokuBoxValueInteger(inputRow+i, inputColumn+j) != 0) {
                     reservedValues.add(sudoku.getSudokuBoxValueInteger(inputRow+i, inputColumn+j));
                 }
             }
+
         }
 
         possibleValuesHashSet.removeAll(reservedValues);

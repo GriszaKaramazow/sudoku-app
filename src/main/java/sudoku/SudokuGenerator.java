@@ -37,10 +37,10 @@ public class SudokuGenerator {
     }
 
     SimpleSudoku generateSimpleSudoku() {
-        while(!fillWithRandom()) {
+        while(true) {
+            if (fillWithRandom()) break;
         }
-        SimpleSudoku simpleSudoku = generatingService.createSudoku();
-        return simpleSudoku;
+        return generatingService.createSudoku();
     }
 
     boolean fillWithRandom() {
